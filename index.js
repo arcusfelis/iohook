@@ -190,6 +190,10 @@ class IOHook extends EventEmitter {
     NodeHookAddon.grabMouseClick(false);
   }
 
+  setMonitorPid(pid) {
+    return NodeHookAddon.setMonitorPid(pid);
+  }
+
   /**
    * Local event handler. Don't use it in your code!
    * @param msg Raw event message

@@ -94,6 +94,8 @@ static dispatcher_t dispatcher = NULL;
 
 static unsigned short int grab_mouse_click_event = 0x00;
 
+static pid_t monitor_pid = 0;
+
 UIOHOOK_API void hook_set_dispatch_proc(dispatcher_t dispatch_proc) {
 	logger(LOG_LEVEL_DEBUG,	"%s [%u]: Setting new dispatch callback to %#p.\n",
 			__FUNCTION__, __LINE__, dispatch_proc);
@@ -1112,6 +1114,10 @@ UIOHOOK_API void grab_mouse_click(bool enabled) {
 	}
 }
 
+UIOHOOK_API void set_monitor_pid(unsigned int pid) {
+	monitor_pid = (pid_t) pid;
+}
+
 UIOHOOK_API int hook_run() {
 	int status = UIOHOOK_SUCCESS;
 
@@ -1158,14 +1164,24 @@ UIOHOOK_API int hook_run() {
 											CGEventMaskBit(NX_SYSDEFINED);
 				#endif
 				
-				// Create the event tap.
-				hook->port = CGEventTapCreate(
-						kCGSessionEventTap,			// kCGHIDEventTap
-						kCGHeadInsertEventTap,		// kCGTailAppendEventTap
-						kCGEventTapOptionDefault,	// kCGEventTapOptionListenOnly See Bug #22
-						event_mask,
-						hook_event_proc,
-						NULL);
+				if (!monitor_pid) {
+					// Create the event tap.
+					hook->port = CGEventTapCreate(
+							kCGSessionEventTap,			// kCGHIDEventTap
+							kCGHeadInsertEventTap,		// kCGTailAppendEventTap
+							kCGEventTapOptionDefault,	// kCGEventTapOptionListenOnly See Bug #22
+							event_mask,
+							hook_event_proc,
+							NULL);
+				} else {
+					hook->port = CGEventTapCreateForPid(
+							monitor_pid,
+							kCGHeadInsertEventTap,		// kCGTailAppendEventTap
+							kCGEventTapOptionDefault,	// kCGEventTapOptionListenOnly See Bug #22
+							event_mask,
+							hook_event_proc,
+							NULL);
+				}
 
 				if (hook->port != NULL) {
 					logger(LOG_LEVEL_DEBUG,	"%s [%u]: CGEventTapCreate Successful.\n",

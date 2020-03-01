@@ -512,6 +512,20 @@ NAN_METHOD(GrabMouseClick) {
   }
 }
 
+NAN_METHOD(SetMonitorPid) {
+  if ( info.Length() != 1 )
+      return;
+
+  if ( !info[0]->IsInt32())
+      return;
+
+  int value = info[0]->IntegerValue();
+  set_monitor_pid(value);
+
+  Local<Integer> retval = Nan::New(1);
+  info.GetReturnValue().Set(retval); 
+}
+
 NAN_METHOD(DebugEnable) {
   if (info.Length() > 0)
   {
@@ -563,6 +577,9 @@ NAN_MODULE_INIT(Init) {
 
   Nan::Set(target, Nan::New<String>("grabMouseClick").ToLocalChecked(),
   Nan::GetFunction(Nan::New<FunctionTemplate>(GrabMouseClick)).ToLocalChecked());
+
+  Nan::Set(target, Nan::New<String>("setMonitorPid").ToLocalChecked(),
+  Nan::GetFunction(Nan::New<FunctionTemplate>(SetMonitorPid)).ToLocalChecked());
 }
 
 NODE_MODULE(nodeHook, Init)
