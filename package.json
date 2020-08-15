@@ -49,9 +49,8 @@
     "jest": "^22.4.3",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "nan": "^2.13.2",
+    "nan": "github:nodejs/nan#master",
     "prebuild": "^6.2.2",
-    "robotjs": "^0.5.1",
     "vuepress": "^0.14.4"
   },
   "supportedTargets": [

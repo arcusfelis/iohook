@@ -39,3 +39,5 @@ libuiohook/*.vcxproj
 libuiohook/*.vcxproj.filters
 libuiohook/*.cmake
 libuiohook/*.sln
+
+.deps

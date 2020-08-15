@@ -1054,6 +1054,7 @@ CGEventRef hook_event_proc(CGEventTapProxy tap_proxy, CGEventType type, CGEventR
 			// Set the mouse dragged flag.
 			mouse_dragged = true;
 			process_mouse_moved(timestamp, event_ref);
+            event.reserved = grab_mouse_click_event;
 			break;
 
 		case kCGEventMouseMoved:
